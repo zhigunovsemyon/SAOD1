@@ -27,6 +27,6 @@
 #define ERR_OUTOFMEM -1 //Не удалось выделить память
 
 //Вывод сообщения об использовании программы
-void usage(void);
+void usage(const char* exename);
 
 #endif
