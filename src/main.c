@@ -17,6 +17,35 @@ void usage(const char* exename);
 
 //Поиск слова TheWord в массиве слов WordList, возрат индекса этого слова, либо -1
 int FindTheWord(const char **WordList, int ListLen, const char *TheWord);
+
+int main (const int argc, const char** argv) {
+    /*Если пользователь не указал аргументы функции, 
+     * ему выведется инструкция по использованию программы */
+    if (argc < 2) {
+        usage(argv[0]);
+        return EXIT_SUCCESS;
+    }
+    //Если пользователь запросил справку, она ему будет выведена
+    if(-1 != FindTheWord(argv, argc, HELPKEY)) {
+        usage(argv[0]);
+        return EXIT_SUCCESS;
+    }
+
+    //Вывод информации об открываемом файле
+    const char* filename = argv[argc - 1];
+    printf("Открываемый файл: %s\n", filename);
+
+    //Попытка открыть файл, вывод сообщения об ошибке в случае неудачи
+    FILE *fptr = fopen(filename, "rt");
+    if(fptr == NULL) {
+        perror(filename);
+        return ERR_FILENOTFOUND;
+    }
+
+    fclose(fptr);//Закрытие файла
+    return EXIT_SUCCESS;
+}
+
 int FindTheWord(const char **WordList, int ListLen, const char *TheWord) {
     /*Цикл обходит массив слов WordList для поиска слова TheWord в нём. 
     Если слово найдено, возращается его индекс, в противном случае -- возрат -1 */
@@ -26,21 +55,6 @@ int FindTheWord(const char **WordList, int ListLen, const char *TheWord) {
         }
     }
     return -1;
-}
-
-int main (const int argc, const char** argv) {
-    /*Если пользователь не указал аргументы функции, 
-     * ему выведется инструкция по использованию программы */
-    if (argc < 2) {
-        usage(argv[0]);
-        return EXIT_SUCCESS;
-    }
-    if(-1 != FindTheWord(argv, argc, HELPKEY)) {
-        usage(argv[0]);
-        return EXIT_SUCCESS;
-    }
-    puts(argv[argc - 1]);
-    return EXIT_SUCCESS;
 }
 
 void usage(const char* exename) {
