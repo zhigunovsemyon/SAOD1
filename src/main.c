@@ -30,6 +30,25 @@ int FindTheWord (const char **WordList, const int ListLen, const char *TheWord);
 
 //Вывод размера открытого файла
 long FileLen(FILE *fptr);
+
+char *ReadUncommentedText(FILE *fptr) {
+    long length = FileLen(fptr);
+    if (length < 1) {
+        return NULL;
+    }
+
+    char *text = (char *) calloc(sizeof(char), (unsigned long)length + 1);
+    if (text == NULL) {
+        return NULL;
+    }
+
+    for(int buf, i = 0;(buf = fgetc(fptr)) != EOF; i++){
+        text[i] = (char)buf;
+    }
+
+    return text;
+}
+
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
      * ему выведется инструкция по использованию программы */
@@ -54,7 +73,9 @@ int main (const int argc, const char** argv) {
         return ERR_FILENOTFOUND;
     }
     printf("Размер файла: %ld\n", FileLen(fptr));
-
+    char *text = ReadUncommentedText(fptr);
+    printf("%s\n", text);
+    free(text);
     fclose(fptr);//Закрытие файла
     return EXIT_SUCCESS;
 }
