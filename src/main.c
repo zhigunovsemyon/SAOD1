@@ -31,27 +31,10 @@ int FindTheWord (const char **WordList, const int ListLen, const char *TheWord);
 //Вывод размера открытого файла
 long FileLen(FILE *fptr);
 
-char *ReadUncommentedText(FILE *fptr) {
-    long length = FileLen(fptr);
-    if (length < 1) {
-        return NULL;
-    }
-
-    char *text = (char *) calloc(sizeof(char), (unsigned long)length + 1);
-    if (text == NULL) {
-        return NULL;
-    }
-
-    for(int buf, i = 0;(buf = fgetc(fptr)) != EOF; i++){
-        while (buf == '#'){
-            while ((buf = fgetc(fptr)) != '\n') {};
-            buf = fgetc(fptr);
-        }
-        text[i] = (char)buf;
-    }
-
-    return text;
-}
+/*Чтение текста из файла fptr в динамически выделенную область
+ * При неудаче возвращается NULL
+*!ПАМЯТЬ ДОЛЖНА БЫТЬ ОСВОБОЖДЕНА!*/
+char *ReadUncommentedText(FILE *fptr);
 
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
@@ -82,6 +65,35 @@ int main (const int argc, const char** argv) {
     free(text);
     fclose(fptr);//Закрытие файла
     return EXIT_SUCCESS;
+}
+
+char *ReadUncommentedText(FILE *fptr) {
+    long length = FileLen(fptr); //Длина файла
+    if (length < 1) {           //Если длина некорректная -- чтение не осуществляется
+        return NULL;
+    }
+    
+    //Выделение памяти под текст, проверка работы calloc
+    char *text = (char *) calloc(sizeof(char), (unsigned long)length + 1);
+    if (text == NULL) {
+        return NULL;
+    }
+
+    //Цикл обходит весь текстовый файл до конца, записывая символы в буффер buf
+    int buf, i;
+    for(i = 0; (buf = fgetc(fptr)) != EOF; i++){
+        //Если при чтении файла встречается #, начинается внутренний цикл, идущий до переноса
+        while (buf == '#'){
+            while ((buf = fgetc(fptr)) != '\n') {};
+            /*После цикла пропуска строки записывается новый символ следующей строки, 
+            если это снова #, следующая строка также пропускается*/
+            buf = fgetc(fptr);
+        }
+        //Содержимое буффера переносится в строку
+        text[i] = (char)buf;
+    }
+    text[i] = '\0'; //EOF заменяется нуль-терминатором
+    return text;    //Возврат на область со строкой
 }
 
 long FileLen(FILE *fptr) {
