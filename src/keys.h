@@ -1,8 +1,6 @@
 #ifndef MAIN_H 
 #define MAIN_H 
 
-#include <stdlib.h>
-#include <stdio.h>
 
 //Ключи работы с программой
 #define HELPKEY "--help" //Вывод информации об использовании
@@ -19,14 +17,5 @@
 #define L3KEY "cs" //Сортировка по третьему предмету
 #define L4KEY "physics" //Сортировка по четвёртому предмету
 #define L5KEY "philosophy" //Сортировка по пятому предмету
-
-//Коды ошибок
-#define ERR_FILENOTFOUND 2 //Не удалось открыть файл
-#define ERR_NOSEARCHPATTERN 3 //Пользователь не указал строку поиска
-#define ERR_NOSORTKEY 4 //Пользователь не указал параметр для сортировки
-#define ERR_OUTOFMEM -1 //Не удалось выделить память
-
-//Вывод сообщения об использовании программы
-void usage(const char* exename);
 
 #endif
