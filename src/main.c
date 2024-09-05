@@ -12,6 +12,16 @@ enum Errors {
     ERR_OUTOFMEM, //Не удалось выделить память
 };
 
+//Запись о студенте
+struct Record {
+    int number; //Номер студента
+    char *surname;//Фамилия студента
+    char *name;//Имя студента
+    char *patronim;//Отчество студента
+    char *id;//Номер студенческого билета
+    int mark[5];//Оценки студента
+};
+
 //Вывод сообщения об использовании программы
 void usage(const char* exename);
 
