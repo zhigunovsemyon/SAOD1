@@ -43,6 +43,10 @@ char *ReadUncommentedText(FILE *fptr) {
     }
 
     for(int buf, i = 0;(buf = fgetc(fptr)) != EOF; i++){
+        while (buf == '#'){
+            while ((buf = fgetc(fptr)) != '\n') {};
+            buf = fgetc(fptr);
+        }
         text[i] = (char)buf;
     }
 
