@@ -28,6 +28,8 @@ void usage(const char* exename);
 //Поиск слова TheWord в массиве слов WordList, возврат индекса этого слова, либо -1
 int FindTheWord (const char **WordList, const int ListLen, const char *TheWord);
 
+//Вывод размера открытого файла
+long FileLen(FILE *fptr);
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
      * ему выведется инструкция по использованию программы */
@@ -51,9 +53,17 @@ int main (const int argc, const char** argv) {
         perror(filename);
         return ERR_FILENOTFOUND;
     }
+    printf("Размер файла: %ld\n", FileLen(fptr));
 
     fclose(fptr);//Закрытие файла
     return EXIT_SUCCESS;
+}
+
+long FileLen(FILE *fptr) {
+    fseek(fptr, SEEK_SET, SEEK_END);
+    long len = ftell(fptr);
+    rewind(fptr);
+    return len;
 }
 
 int FindTheWord(const char **WordList, const int ListLen, const char *TheWord) {
