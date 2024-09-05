@@ -25,7 +25,7 @@ struct Record {
 //Вывод сообщения об использовании программы
 void usage(const char* exename);
 
-//Поиск слова TheWord в массиве слов WordList, возрат индекса этого слова, либо -1
+//Поиск слова TheWord в массиве слов WordList, возврат индекса этого слова, либо -1
 int FindTheWord (const char **WordList, const int ListLen, const char *TheWord);
 
 int main (const int argc, const char** argv) {
@@ -58,7 +58,7 @@ int main (const int argc, const char** argv) {
 
 int FindTheWord(const char **WordList, const int ListLen, const char *TheWord) {
     /*Цикл обходит массив слов WordList для поиска слова TheWord в нём. 
-    Если слово найдено, возращается его индекс, в противном случае -- возрат -1 */
+    Если слово найдено, возвращается его индекс, в противном случае -- возврат -1 */
     for (int i = 0; i < ListLen; i++) {
         if (!strcmp(WordList[i], TheWord)) {
             return i;
