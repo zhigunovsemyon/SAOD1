@@ -14,7 +14,8 @@ set(CMAKE_C_STANDARD 11)
 file(GLOB C_FILES "src/*.c")
 
 if (WIN32)
-	add_definitions("/W3 /WX") #W4 даёт странные ошибки, Wall цепляет ошибки из SDL
+	add_definitions("/W4 /WX") #Wall выводит ошибку "Record: 4 bytes padding addede after data member"
+	add_compile_options(-D _CRT_SECURE_NO_WARNINGS) #fopen и scanf
 else()
 	add_definitions("-Wall -Wextra -Werror -Wconversion -Wsign-conversion")
 endif(WIN32)
