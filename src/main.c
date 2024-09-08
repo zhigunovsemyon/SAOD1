@@ -29,6 +29,9 @@ struct Record {
     int marks[5];//Оценки студента
 };
 
+//Функция инвертированной сортировки по словам
+int invert_strcmp(const char *str1, const char *str2);
+
 //Вывод сообщения об использовании программы
 void usage(const char* exename);
 
@@ -114,6 +117,10 @@ void PrintStudentList(FILE* dest, struct Record* List, const int count) {
             cur->number, cur->surname, cur->name, cur->patronim, cur->id,
             cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
     }
+}
+
+int invert_strcmp(const char *str1, const char *str2) {
+    return (-1) * strcmp(str1, str2);
 }
 
 struct Record* GetStudentList(char* text, int *count) {
