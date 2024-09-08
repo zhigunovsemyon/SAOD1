@@ -147,7 +147,7 @@ struct Record* GetStudentList(char* text, int *count) {
 
         /*Перевыделение памяти под новое число записей, 
         если выделить память не удалось, из функции возращается старый указатель */
-        struct Record* newStudents = (struct Record*)realloc(Students, (*count + 1) * sizeof(struct Record));
+        struct Record* newStudents = (struct Record*)realloc(Students, (size_t)(*count + 1) * sizeof(struct Record));
         if (newStudents == NULL) {
             free(newName);
             free(newSurname);
