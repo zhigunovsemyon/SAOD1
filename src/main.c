@@ -6,6 +6,7 @@
  * */
 
 #include "main.h"
+#include <complex.h>
 
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
@@ -30,36 +31,51 @@ int main (const int argc, const char** argv) {
         perror(filename);
         return EXIT_FAILURE;
     }
-    printf("Размер файла: %ld\n\n", FileLen(fptr));
-    //Текст из файла без комментариев
+
+    //Текст из файла без комментариев. Проверка на NULL осуществляется в GetStudentList()
     char *text = ReadUncommentedText(fptr);
-
-    int StudentCount; //Счётчик числа записей
-    //Список записей
-    struct Record* StudentList = GetStudentList(text, &StudentCount);
-
-    free(text);     //Очистка буфера текста
     fclose(fptr);   //Закрытие файла
 
-    int parameterIndex;
+    int StudentCount; //Счётчик числа записей, зануляется в вызове GetStudentList()
+    struct Record* StudentList;//Список записей.
+    //Заполнение списка записей. Если text == NULL, то StudentList == NULL
+    StudentList = GetStudentList(text, &StudentCount);
+
+    free(text);     //Очистка буфера текста
+
+    int parameterIndex; //Индекс режима работы
+    
+    /*Если пользователь выбрал сортировку по возрастанию, то осуществляется вызов функции, 
+    сортирующей поля по ключу, идущему за индексом режима работы (parameterIndex). Если ключ некорректный --
+    осуществляется досрочное освобождение памяти, пользователю выводится справка*/
     if ((parameterIndex = FindTheWord(argv, argc, SORTAKEY)) != -1) {
         if(0 != SortA_List(StudentList, StudentCount, argv[parameterIndex + 1])) {
             printf("Некорректный параметр сортировки: %s\n", argv[parameterIndex + 1]);
-            printf("Вывод списка без изменений целиком\n");
+            FreeStudentList(StudentList, StudentCount);
+            usage(argv[0]);
+            return EXIT_FAILURE;
         }
+    /*Если пользователь выбрал сортировку по убыванию, то осуществляется вызов функции, 
+    сортирующей поля по ключу, идущему за индексом режима работы (parameterIndex). Если ключ некорректный --
+    осуществляется досрочное освобождение памяти, пользователю выводится справка*/
     } else if ((parameterIndex = FindTheWord(argv, argc, SORTDKEY)) != -1) {
         if(0 != SortD_List(StudentList, StudentCount, argv[parameterIndex + 1])) {
             printf("Некорректный параметр сортировки: %s\n", argv[parameterIndex + 1]);
-            printf("Вывод списка без изменений целиком\n");
+            FreeStudentList(StudentList, StudentCount);
+            usage(argv[0]);
+            return EXIT_FAILURE;
         }
     } 
 
+    /* Если пользователь захотел осуществить поиск среди полей, то осуществляется вызов функции,
+     * выводящей только записи, соответствующие поисковому запросу. 
+     * Если таких записей нет -- выводится сообщение.*/
     if ((parameterIndex = FindTheWord(argv, argc, SEARCHKEY)) != -1) {
         if (0 != PrintStudentsMatchingQuery(stdout, StudentList, StudentCount, argv[parameterIndex + 1])) {
-            printf("Список пуст!\n");
+            printf("Не найдено записей по запросу: \"%s\"!\n", argv[parameterIndex + 1]);
         } 
+    /* В ином случае осуществляется вывод всей базы данных */
     } else {
-        printf("Вывод списка без изменений целиком\n");
         if (StudentList != NULL && StudentCount > 0){
             PrintWholeStudentList(stdout, StudentList, StudentCount);
         }
@@ -67,7 +83,8 @@ int main (const int argc, const char** argv) {
             printf("Список пуст!\n");
         }
     }
-
+    
+    //Очистка динамически выделенной памяти, завершение работы
     FreeStudentList(StudentList, StudentCount);
     return EXIT_SUCCESS;
 }
@@ -82,10 +99,6 @@ void FreeStudentList(struct Record *List, int count) {
 }
 
 int SortA_List (struct Record *List, int count, const char *sortkey) {
-    if (List == NULL && count < 1){
-        return 0;
-    }
-
     if(!strcmp(sortkey, SURNAMEKEY)) {
         qsort(List, (size_t)count, sizeof(struct Record), SortA_Surname);
         return 0;
@@ -199,7 +212,7 @@ struct Record* GetStudentList(char* text, int *count) {
     char tmpId[8] = { 0 };          //Временное хранилище номера з/к
     int tmpMarks[5] = { 0 };        //Временное хранилище оценок
     struct Record* Students = NULL; //Указатель на область памяти со студентами
-    *count = 0; //Обнуление счётчика перед началом
+    *count = 0;                     //Обнуление счётчика перед началом
     
     /*Цикл чтения строки*/
     while (1)  {
