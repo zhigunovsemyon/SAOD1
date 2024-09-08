@@ -95,109 +95,113 @@ void FreeStudentList(struct Record *List, int count) {
         free(List[count].surname);
         free(List[count].patronim);
     }
+    //После освобождения 0-го поля (count == -1), освобождается список в целом
     free(List);
 }
 
 int SortA_List (struct Record *List, int count, const char *sortkey) {
-    if(!strcmp(sortkey, SURNAMEKEY)) {
+    if(!strcmp(sortkey, SURNAMEKEY)) { //Если ключ сортировки соответсвует пофамильному
         qsort(List, (size_t)count, sizeof(struct Record), SortA_Surname);
         return 0;
-    } else if (!strcmp(sortkey, NAMEKEY)) {
+    } else if (!strcmp(sortkey, NAMEKEY)) { //Если ключ сортировки соответсвует поименному
         qsort(List, (size_t)count, sizeof(struct Record), SortA_Name);
         return 0;
-    } else if (!strcmp(sortkey, PATRONIMKEY)) {
+    } else if (!strcmp(sortkey, PATRONIMKEY)) { //Если ключ сортировки по отчествам
         qsort(List, (size_t)count, sizeof(struct Record), SortA_Patronim);
         return 0;
-    } else if (!strcmp(sortkey, NUMKEY)) {
+    } else if (!strcmp(sortkey, NUMKEY)) { //Если ключ сортировки по номерам
         qsort(List, (size_t)count, sizeof(struct Record), SortA_Num);
         return 0;
-    } else if (!strcmp(sortkey, IDKEY)) {
+    } else if (!strcmp(sortkey, IDKEY)) { //Если ключ сортировки по номерам з/к
         qsort(List, (size_t)count, sizeof(struct Record), SortA_ID);
         return 0;
-    } else if (!strcmp(sortkey, L1KEY)) {
+    } else if (!strcmp(sortkey, L1KEY)) { //Если ключ сортировки по первому предмету
         qsort(List, (size_t)count, sizeof(struct Record), SortA_L1);
         return 0;
-    } else if (!strcmp(sortkey, L2KEY)) {
+    } else if (!strcmp(sortkey, L2KEY)) { //Если ключ сортировки по второму предмету
         qsort(List, (size_t)count, sizeof(struct Record), SortA_L2);
         return 0;
-    } else if (!strcmp(sortkey, L3KEY)) {
+    } else if (!strcmp(sortkey, L3KEY)) { //Если ключ сортировки по третьему предмету
         qsort(List, (size_t)count, sizeof(struct Record), SortA_L3);
         return 0;
-    } else if (!strcmp(sortkey, L4KEY)) {
+    } else if (!strcmp(sortkey, L4KEY)) { //Если ключ сортировки по четвёртому предмету
         qsort(List, (size_t)count, sizeof(struct Record), SortA_L4);
         return 0;
-    } else if (!strcmp(sortkey, L5KEY)) {
+    } else if (!strcmp(sortkey, L5KEY)) { //Если ключ сортировки по пятому предмету
         qsort(List, (size_t)count, sizeof(struct Record), SortA_L5);
         return 0;
-    } else {
+    } else { //Если ключ некорректный -- возвращается соответствующий флаг
         return 1;
     }
-
 }
 
 int SortD_List (struct Record *List, int count, const char *sortkey) {
-    if (List == NULL && count < 1){
+    if(!strcmp(sortkey, SURNAMEKEY)) { //Если ключ сортировки соответсвует пофамильному
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_Surname);
         return 0;
-    }
-
-    if(!strcmp(sortkey, SURNAMEKEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_Surname);
+    } else if (!strcmp(sortkey, NAMEKEY)) { //Если ключ сортировки соответсвует поименному
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_Name);
         return 0;
-    } else if (!strcmp(sortkey, NAMEKEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_Name);
+    } else if (!strcmp(sortkey, PATRONIMKEY)) { //Если ключ сортировки по отчествам
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_Patronim);
         return 0;
-    } else if (!strcmp(sortkey, PATRONIMKEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_Patronim);
+    } else if (!strcmp(sortkey, NUMKEY)) { //Если ключ сортировки по номерам
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_Num);
         return 0;
-    } else if (!strcmp(sortkey, NUMKEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_Num);
+    } else if (!strcmp(sortkey, IDKEY)) { //Если ключ сортировки по номерам з/к
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_ID);
         return 0;
-    } else if (!strcmp(sortkey, IDKEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_ID);
+    } else if (!strcmp(sortkey, L1KEY)) { //Если ключ сортировки по первому предмету
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L1);
         return 0;
-    } else if (!strcmp(sortkey, L1KEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_L1);
+    } else if (!strcmp(sortkey, L2KEY)) { //Если ключ сортировки по второму предмету
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L2);
         return 0;
-    } else if (!strcmp(sortkey, L2KEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_L2);
+    } else if (!strcmp(sortkey, L3KEY)) { //Если ключ сортировки по третьему предмету
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L3);
         return 0;
-    } else if (!strcmp(sortkey, L3KEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_L3);
+    } else if (!strcmp(sortkey, L4KEY)) { //Если ключ сортировки по четвёртому предмету
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L4);
         return 0;
-    } else if (!strcmp(sortkey, L4KEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_L4);
+    } else if (!strcmp(sortkey, L5KEY)) { //Если ключ сортировки по пятому предмету
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L5);
         return 0;
-    } else if (!strcmp(sortkey, L5KEY)) {
-        qsort(List, (size_t)count, sizeof(struct Record), SortD_L5);
-        return 0;
-    } else {
+    } else { //Если ключ некорректный -- возвращается соответствующий флаг
         return 1;
     }
 }
 
 int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count, const char *query) {
-    int EmptyFlag = 1;
-    size_t QueryLen = strlen(query);
+    int EmptyFlag = 1; //Флаг несоответствия запроса записям
+    size_t QueryLen = strlen(query);//Длинна запроса
+    //Цикл, перебирающий каждую запись
     for (int i = 0; i < count; ++i) {
-        struct Record* cur = List + i;
+        struct Record* cur = List + i;//Текущая запись
+
+        /* Если запрос совпал с текстовым полем (имени, фамилии, отчества, ном. з/к), 
+         * или 1й символ запроса совпал с одной из оценок либо номером в журнале, то... */
         if(!(strncmp(query, cur->surname, QueryLen) && strncmp(query, cur->name, QueryLen) && 
             strncmp(query, cur->id, QueryLen) && strncmp(query, cur->patronim, QueryLen) && 
             (cur->marks[0] + '0' - query[0]) && (cur->marks[1] + '0' - query[0]) && 
             (cur->marks[2] + '0' - query[0]) && (cur->marks[3] + '0' - query[0]) && 
             (cur->marks[4] + '0' - query[0]) && (cur->number + '0' - query[0]))) {
-            EmptyFlag = 0;
+            EmptyFlag = 0;//Осуществляется сброс флага несоответствия
+            //Осуществляется вывод записи
             fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
                 cur->number, cur->surname, cur->name, cur->patronim, cur->id,
                 cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
         }
     }
+    //Флаг возвращается из функции
     return EmptyFlag;
 }
 
 void PrintWholeStudentList(FILE* dest, struct Record* List, const int count) {
-    puts("Список:");
+    //Цикл, перебирающий каждую запись
     for (int i = 0; i < count; ++i) {
-        struct Record* cur = List + i;
+        struct Record* cur = List + i;//Текущая запись
+
+        //Вывод записи
         fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
             cur->number, cur->surname, cur->name, cur->patronim, cur->id,
             cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
@@ -284,17 +288,18 @@ char *ReadUncommentedText(FILE *fptr) {
     if (length < 1) {           //Если длина некорректная -- чтение не осуществляется
         return NULL;
     }
-    
+    char *text; //Буфер с очищенным текстом
     //Выделение памяти под текст, проверка работы calloc
-    char *text = (char *) calloc(sizeof(char), (size_t)length + 1);
+    text = (char *) calloc(sizeof(char), (size_t)length + 1);
     if (text == NULL) {
         return NULL;
     }
 
-    //Цикл обходит весь текстовый файл до конца, записывая символы в буффер buf
-    int buf, i;
+    int buf,// Временный буфер для символа
+        i; //Счётчик
+    //Цикл обходит весь текстовый файл до конца, записывая символы в буфер buf
     for(i = 0; (buf = fgetc(fptr)) != EOF; i++){
-        //Если при чтении файла встречается #, начинается внутренний цикл, идущий до переноса
+        //Если при чтении файла встречается #, начинается внутренний цикл, идущий до переноса строки
         while (buf == '#'){
             do {
                 buf = fgetc(fptr);
@@ -303,11 +308,11 @@ char *ReadUncommentedText(FILE *fptr) {
             если это снова #, следующая строка также пропускается*/
             buf = fgetc(fptr);
         }
-        //Содержимое буффера переносится в строку
+        //Содержимое буфера переносится в строку
         text[i] = (char)buf;
     }
     text[i] = '\0'; //EOF заменяется нуль-терминатором
-    return text;    //Возврат на область со строкой
+    return text;    //Возврат указателя на область со строкой
 }
 
 long FileLen(FILE *fptr) {
