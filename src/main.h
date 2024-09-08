@@ -21,6 +21,9 @@ struct Record {
     int marks[5];//Оценки студента
 };
 
+//Очистка из памяти динамического списка записей List размера count
+void FreeStudentList(struct Record *List, int count);
+
 /*Сортировка списка List размера count по возрастанию по параметру sortkey
  * Возвращает ноль при удачной сортировке, либо 1, если sortkey некорректный*/
 int SortA_List (struct Record *List, int count, const char *sortkey);
@@ -29,10 +32,10 @@ int SortA_List (struct Record *List, int count, const char *sortkey);
  * Возвращает ноль при удачной сортировке, либо 1, если sortkey некорректный*/
 int SortD_List (struct Record *List, int count, const char *sortkey);
 
-/* Поиск в записях по строке sortKey
- * Функция осуществляет возврат нового списка заместо старого oldList, освобождая его
- * передача размера осуществляется через *count*/
-// struct Record *SearchInList (struct Record *oldList, int *count, const char *sortkey);
+/*Вывод из списка записей List величиной count в поток dest
+ * только тех записей, которые соответствуют запросу query.
+ * Если список пустой, возвращает 1, если нет -- 0*/
+int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count, const char *query);
 
 //Вывод сообщения об использовании программы
 void usage(const char* exename);
@@ -54,7 +57,7 @@ char *ReadUncommentedText(FILE *fptr);
 struct Record* GetStudentList(char* text, int *count);
 
 //Вывод списка записей List величиной count в поток dest
-void PrintStudentList(FILE* dest, struct Record* List, const int count);
+void PrintWholeStudentList(FILE* dest, struct Record* List, const int count);
 
 //Файл с ключами
 #include "keys.h"

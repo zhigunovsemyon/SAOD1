@@ -6,7 +6,6 @@
  * */
 
 #include "main.h"
-#include "keys.h"
 
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
@@ -53,20 +52,33 @@ int main (const int argc, const char** argv) {
             printf("Некорректный параметр сортировки: %s\n", argv[parameterIndex + 1]);
             printf("Вывод списка без изменений целиком\n");
         }
-    } else if ((parameterIndex = FindTheWord(argv, argc, SEARCHKEY)) != -1) {
+    } 
+
+    if ((parameterIndex = FindTheWord(argv, argc, SEARCHKEY)) != -1) {
+        if (0 != PrintStudentsMatchingQuery(stdout, StudentList, StudentCount, argv[parameterIndex + 1])) {
+            printf("Список пуст!\n");
+        } 
     } else {
         printf("Вывод списка без изменений целиком\n");
+        if (StudentList != NULL && StudentCount > 0){
+            PrintWholeStudentList(stdout, StudentList, StudentCount);
+        }
+        else {
+            printf("Список пуст!\n");
+        }
     }
 
-    if (StudentList != NULL && StudentCount > 0){
-        PrintStudentList(stdout, StudentList, StudentCount);
-        free(StudentList);
-    }
-    else {
-        printf("Список пуст!");
-    }
-
+    FreeStudentList(StudentList, StudentCount);
     return EXIT_SUCCESS;
+}
+
+void FreeStudentList(struct Record *List, int count) {
+    while (count--) {
+        free(List[count].name);
+        free(List[count].surname);
+        free(List[count].patronim);
+    }
+    free(List);
 }
 
 int SortA_List (struct Record *List, int count, const char *sortkey) {
@@ -150,11 +162,26 @@ int SortD_List (struct Record *List, int count, const char *sortkey) {
     }
 }
 
-// struct Record *SearchInList (struct Record *oldList, int *count, const char *sortkey) {
-//     return 0;
-// }
+int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count, const char *query) {
+    int EmptyFlag = 1;
+    size_t QueryLen = strlen(query);
+    for (int i = 0; i < count; ++i) {
+        struct Record* cur = List + i;
+        if(!(strncmp(query, cur->surname, QueryLen) && strncmp(query, cur->name, QueryLen) && 
+            strncmp(query, cur->id, QueryLen) && strncmp(query, cur->patronim, QueryLen) && 
+            (cur->marks[0] + '0' - query[0]) && (cur->marks[1] + '0' - query[0]) && 
+            (cur->marks[2] + '0' - query[0]) && (cur->marks[3] + '0' - query[0]) && 
+            (cur->marks[4] + '0' - query[0]) && (cur->number + '0' - query[0]))) {
+            EmptyFlag = 0;
+            fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
+                cur->number, cur->surname, cur->name, cur->patronim, cur->id,
+                cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
+        }
+    }
+    return EmptyFlag;
+}
 
-void PrintStudentList(FILE* dest, struct Record* List, const int count) {
+void PrintWholeStudentList(FILE* dest, struct Record* List, const int count) {
     puts("Список:");
     for (int i = 0; i < count; ++i) {
         struct Record* cur = List + i;
@@ -198,9 +225,9 @@ struct Record* GetStudentList(char* text, int *count) {
         }
 
         /*Выделение динамических буферов под поля, проверка*/
-        char *newName = (char *) malloc(strlen(tmpName));
-        char *newSurname = (char *) malloc(strlen(tmpSurname));
-        char *newPatronim = (char *) malloc(strlen(tmpPatronim));
+        char *newName = (char *) malloc(1 + strlen(tmpName));
+        char *newSurname = (char *) malloc(1 + strlen(tmpSurname));
+        char *newPatronim = (char *) malloc(1 + strlen(tmpPatronim));
         if (!(newName && newSurname && newPatronim)) {
             free(newName);
             free(newSurname);
