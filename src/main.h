@@ -5,12 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 
-//Коды ошибок
-enum Errors {
-    ERR_FILENOTFOUND = 1,  //Не удалось открыть файл
-    ERR_OUTOFMEM, //Не удалось выделить память
-};
-
 //Запись о студенте
 struct Record {
     int number; //Номер студента

@@ -28,7 +28,7 @@ int main (const int argc, const char** argv) {
     //Попытка открыть файл, вывод сообщения об ошибке в случае неудачи
     if((fptr = fopen(filename, "rt")) == NULL) {
         perror(filename);
-        return ERR_FILENOTFOUND;
+        return EXIT_FAILURE;
     }
     printf("Размер файла: %ld\n\n", FileLen(fptr));
     //Текст из файла без комментариев
