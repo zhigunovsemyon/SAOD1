@@ -43,9 +43,10 @@ long FileLen(FILE *fptr);
 *!ПАМЯТЬ ДОЛЖНА БЫТЬ ОСВОБОЖДЕНА!*/
 char *ReadUncommentedText(FILE *fptr);
 
-/*Функция чтения из строки text записей о студентах
+/*Функция чтения из строки text записей о студентах. 
+Через count передаётся информация о числе записей.
 !ПАМЯТЬ ДОЛЖНА БЫТЬ ОСВОБОЖДЕНА! */
-struct Record* GetStudentList(const char* text);
+struct Record* GetStudentList(char* text, int *count);
 
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
@@ -78,14 +79,74 @@ int main (const int argc, const char** argv) {
     return EXIT_SUCCESS;
 }
 
-struct Record* GetStudentList(const char* text) {
-    char tmpSurname[100];   //Временное хранилище фамилий
-    char tmpName[100];      //Временное хранилище имени
-    char tmpPatronim[100];  //Временное хранилище отчества
-    char tmpId[8];          //Временное хранилище номера з/к
-    int tmpNum;             //Временное хранилище номера
-    int tmpMarks[5];        //Временное хранилище оценок
+struct Record* GetStudentList(char* text, int *count) {
+    int tmpNum;                     //Временное хранилище номера
+    char tmpSurname[100];       //Временное хранилище фамилий
+    char tmpName[100];         //Временное хранилище имени
+    char tmpPatronim[100];         //Временное хранилище отчества
+    char tmpId[8];         //Временное хранилище номера з/к
+    int tmpMarks[5];         //Временное хранилище оценок
+    struct Record* Students = NULL; //Указатель на область памяти со студентами
 
+    /*Цикл чтения строки*/
+    for (*count = 0;; (*count)++) {
+        //Если строка закончилась, смысла пытаться её прочитать нет
+        if (text == NULL) {
+            return Students;
+        }
+
+        //Чтение строки, сохранение числа прочитанных полей
+        const int scanfOutput = sscanf(text, "%d %99s %99s %99s %7s %d %d %d %d %d",
+            &tmpNum, tmpSurname, tmpName, tmpPatronim, tmpId,
+            tmpMarks, tmpMarks + 1, tmpMarks + 2, tmpMarks + 3, tmpMarks + 4);
+
+        //Если в результате чтения очередная строка не была прочитана полностью, чтение завершается
+        if (10 != scanfOutput) {
+            return Students;
+        }
+
+        //Перемещение указателя на следующую строку
+        text = strchr(text, '\n');
+
+        /*Выделение динамических буферов под поля, проверка*/
+        char *newName = (char *) malloc(strlen(tmpName));
+        char *newSurname = (char *) malloc(strlen(tmpSurname));
+        char *newPatronim = (char *) malloc(strlen(tmpPatronim));
+        if (!(newName && newSurname && newPatronim)) {
+            free(newName);
+            free(newSurname);
+            free(newPatronim);
+            return Students;
+        }
+
+        /*Перевыделение памяти под новое число записей, 
+        если выделить память не удалось, из функции возращается старый указатель */
+        struct Record* newStudents = (struct Record*)realloc(Students, (*count + 1) * sizeof(struct Record));
+        if (newStudents == NULL) {
+            free(newName);
+            free(newSurname);
+            free(newPatronim);
+            return Students;
+        }
+
+        //Копирование текста в новые буферы
+        strcpy(newName, tmpName);
+        strcpy(newSurname, tmpSurname);
+        strcpy(newPatronim, tmpPatronim);
+
+        //Расстановка новых буферов в поля записи
+        newStudents[*count].surname = newSurname;
+        newStudents[*count].name = newName;
+        newStudents[*count].patronim = newPatronim;
+       
+        //Копирование остальных полей
+        newStudents[*count].number = tmpNum;
+        strcpy(newStudents[*count].id, tmpId);
+        memcpy(newStudents[*count].marks, tmpMarks, 5 * sizeof(int));
+
+        //Замена указателя на список записей на новый
+        Students = newStudents;
+    }
 }
 
 char *ReadUncommentedText(FILE *fptr) {
@@ -95,7 +156,7 @@ char *ReadUncommentedText(FILE *fptr) {
     }
     
     //Выделение памяти под текст, проверка работы calloc
-    char *text = (char *) calloc(sizeof(char), (unsigned long)length + 1);
+    char *text = (char *) calloc(sizeof(char), (size_t)length + 1);
     if (text == NULL) {
         return NULL;
     }
