@@ -178,19 +178,28 @@ int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count,
     for (int i = 0; i < count; ++i) {
         struct Record* cur = List + i;//Текущая запись
 
-        /* Если запрос совпал с текстовым полем (имени, фамилии, отчества, ном. з/к), 
-         * или 1й символ запроса совпал с одной из оценок либо номером в журнале, то... */
-        if(!(strncmp(query, cur->surname, QueryLen) && strncmp(query, cur->name, QueryLen) && 
-            strncmp(query, cur->id, QueryLen) && strncmp(query, cur->patronim, QueryLen) && 
-            (cur->marks[0] + '0' - query[0]) && (cur->marks[1] + '0' - query[0]) && 
-            (cur->marks[2] + '0' - query[0]) && (cur->marks[3] + '0' - query[0]) && 
-            (cur->marks[4] + '0' - query[0]) && (cur->number + '0' - query[0]))) {
-            EmptyFlag = 0;//Осуществляется сброс флага несоответствия
-            //Осуществляется вывод записи
-            fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
-                cur->number, cur->surname, cur->name, cur->patronim, cur->id,
-                cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
+        /* Если запрос не совпал с текстовым полем (имени, фамилии, отчества, ном. з/к)... */ 
+        if((strncmp(query, cur->surname, QueryLen) && strncmp(query, cur->name, QueryLen) && 
+            strncmp(query, cur->id, QueryLen) && strncmp(query, cur->patronim, QueryLen))) {
+            /* ...и длина запроса == 1, но 1й символ запроса не совпал с одной из оценок либо номером в журнале, 
+             * то текущая позиция пропускается, цикл переходит на следующий виток */
+            if (QueryLen == 1) {
+                if((strncmp(query, cur->surname, QueryLen) && strncmp(query, cur->name, QueryLen) && 
+                    strncmp(query, cur->id, QueryLen) && strncmp(query, cur->patronim, QueryLen) && 
+                    (cur->marks[0] + '0' - query[0]) && (cur->marks[1] + '0' - query[0]) && 
+                    (cur->marks[2] + '0' - query[0]) && (cur->marks[3] + '0' - query[0]) && 
+                    (cur->marks[4] + '0' - query[0]) && (cur->number + '0' - query[0]))) {
+                    continue;
+                }
+            } else {
+                continue;
+            }
         }
+        EmptyFlag = 0;//Осуществляется сброс флага несоответствия
+        //Осуществляется вывод записи
+        fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
+            cur->number, cur->surname, cur->name, cur->patronim, cur->id,
+            cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
     }
     //Флаг возвращается из функции
     return EmptyFlag;
