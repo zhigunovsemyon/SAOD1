@@ -6,6 +6,7 @@
  * */
 
 #include "main.h"
+#include "keys.h"
 
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
@@ -43,9 +44,15 @@ int main (const int argc, const char** argv) {
 
     int parameterIndex;
     if ((parameterIndex = FindTheWord(argv, argc, SORTAKEY)) != -1) {
-        SortA_List(StudentList, StudentCount, argv[parameterIndex + 1]);
+        if(0 != SortA_List(StudentList, StudentCount, argv[parameterIndex + 1])) {
+            printf("Некорректный параметр сортировки: %s\n", argv[parameterIndex + 1]);
+            printf("Вывод списка без изменений целиком\n");
+        }
     } else if ((parameterIndex = FindTheWord(argv, argc, SORTDKEY)) != -1) {
-        SortD_List(StudentList, StudentCount, argv[parameterIndex + 1]);
+        if(0 != SortD_List(StudentList, StudentCount, argv[parameterIndex + 1])) {
+            printf("Некорректный параметр сортировки: %s\n", argv[parameterIndex + 1]);
+            printf("Вывод списка без изменений целиком\n");
+        }
     } else if ((parameterIndex = FindTheWord(argv, argc, SEARCHKEY)) != -1) {
     } else {
         printf("Вывод списка без изменений целиком\n");
@@ -70,6 +77,33 @@ int SortA_List (struct Record *List, int count, const char *sortkey) {
     if(!strcmp(sortkey, SURNAMEKEY)) {
         qsort(List, (size_t)count, sizeof(struct Record), SortA_Surname);
         return 0;
+    } else if (!strcmp(sortkey, NAMEKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_Name);
+        return 0;
+    } else if (!strcmp(sortkey, PATRONIMKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_Patronim);
+        return 0;
+    } else if (!strcmp(sortkey, NUMKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_Num);
+        return 0;
+    } else if (!strcmp(sortkey, IDKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_ID);
+        return 0;
+    } else if (!strcmp(sortkey, L1KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L1);
+        return 0;
+    } else if (!strcmp(sortkey, L2KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L2);
+        return 0;
+    } else if (!strcmp(sortkey, L3KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L3);
+        return 0;
+    } else if (!strcmp(sortkey, L4KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L4);
+        return 0;
+    } else if (!strcmp(sortkey, L5KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_L5);
+        return 0;
     } else {
         return 1;
     }
@@ -83,6 +117,33 @@ int SortD_List (struct Record *List, int count, const char *sortkey) {
 
     if(!strcmp(sortkey, SURNAMEKEY)) {
         qsort(List, (size_t)count, sizeof(struct Record), SortD_Surname);
+        return 0;
+    } else if (!strcmp(sortkey, NAMEKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_Name);
+        return 0;
+    } else if (!strcmp(sortkey, PATRONIMKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_Patronim);
+        return 0;
+    } else if (!strcmp(sortkey, NUMKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_Num);
+        return 0;
+    } else if (!strcmp(sortkey, IDKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_ID);
+        return 0;
+    } else if (!strcmp(sortkey, L1KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L1);
+        return 0;
+    } else if (!strcmp(sortkey, L2KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L2);
+        return 0;
+    } else if (!strcmp(sortkey, L3KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L3);
+        return 0;
+    } else if (!strcmp(sortkey, L4KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L4);
+        return 0;
+    } else if (!strcmp(sortkey, L5KEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L5);
         return 0;
     } else {
         return 1;
