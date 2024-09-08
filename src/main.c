@@ -48,6 +48,9 @@ char *ReadUncommentedText(FILE *fptr);
 !ПАМЯТЬ ДОЛЖНА БЫТЬ ОСВОБОЖДЕНА! */
 struct Record* GetStudentList(char* text, int *count);
 
+//Вывод списка записей List величиной count в поток dest
+void PrintStudentList(FILE* dest, struct Record* List, const int count);
+
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
      * ему выведется инструкция по использованию программы */
@@ -78,10 +81,22 @@ int main (const int argc, const char** argv) {
     int StudentCount;
     struct Record* StudentList = GetStudentList(text, &StudentCount);
 
+    PrintStudentList(stdout, StudentList, StudentCount);
+
     free(StudentList);
     free(text);
     fclose(fptr);//Закрытие файла
     return EXIT_SUCCESS;
+}
+
+void PrintStudentList(FILE* dest, struct Record* List, const int count) {
+    puts("Список:");
+    for (int i = 0; i < count; ++i) {
+        struct Record* cur = List + i;
+        fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
+            cur->number, cur->surname, cur->name, cur->patronim, cur->id,
+            cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
+    }
 }
 
 struct Record* GetStudentList(char* text, int *count) {
@@ -92,9 +107,10 @@ struct Record* GetStudentList(char* text, int *count) {
     char tmpId[8] = { 0 };          //Временное хранилище номера з/к
     int tmpMarks[5] = { 0 };        //Временное хранилище оценок
     struct Record* Students = NULL; //Указатель на область памяти со студентами
-
+    *count = 0; //Обнуление счётчика перед началом
+    
     /*Цикл чтения строки*/
-    for (*count = 0;; (*count)++) {
+    while (1)  {
         //Если строка закончилась, смысла пытаться её прочитать нет
         if (text == NULL) {
             return Students;
@@ -112,6 +128,9 @@ struct Record* GetStudentList(char* text, int *count) {
 
         //Перемещение указателя на следующую строку
         text = strchr(text, '\n');
+        if (text != NULL) {
+            text++;
+        }
 
         /*Выделение динамических буферов под поля, проверка*/
         char *newName = (char *) malloc(strlen(tmpName));
@@ -151,6 +170,7 @@ struct Record* GetStudentList(char* text, int *count) {
 
         //Замена указателя на список записей на новый
         Students = newStudents;
+        (*count)++;
     }
 }
 
