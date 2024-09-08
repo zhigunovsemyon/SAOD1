@@ -5,52 +5,7 @@
  * 3. Поиск
  * */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-//Файл с ключами
-#include "keys.h"
-
-//Коды ошибок
-enum Errors {
-    ERR_FILENOTFOUND = 1,  //Не удалось открыть файл
-    ERR_NOSEARCHPATTERN, //Пользователь не указал строку поиска
-    ERR_NOSORTKEY, //Пользователь не указал параметр для сортировки
-    ERR_OUTOFMEM, //Не удалось выделить память
-};
-
-//Запись о студенте
-struct Record {
-    int number; //Номер студента
-    char *surname;//Фамилия студента
-    char *name;//Имя студента
-    char *patronim;//Отчество студента
-    char id[8];//Номер студенческого билета
-    int marks[5];//Оценки студента
-};
-
-//Вывод сообщения об использовании программы
-void usage(const char* exename);
-
-//Поиск слова TheWord в массиве слов WordList, возврат индекса этого слова, либо -1
-int FindTheWord (const char **WordList, const int ListLen, const char *TheWord);
-
-//Вывод размера открытого файла
-long FileLen(FILE *fptr);
-
-/*Чтение текста из файла fptr в динамически выделенную область
- * При неудаче возвращается NULL
-*!ПАМЯТЬ ДОЛЖНА БЫТЬ ОСВОБОЖДЕНА!*/
-char *ReadUncommentedText(FILE *fptr);
-
-/*Функция чтения из строки text записей о студентах. 
-Через count передаётся информация о числе записей.
-!ПАМЯТЬ ДОЛЖНА БЫТЬ ОСВОБОЖДЕНА! */
-struct Record* GetStudentList(char* text, int *count);
-
-//Вывод списка записей List величиной count в поток dest
-void PrintStudentList(FILE* dest, struct Record* List, const int count);
-
+#include "main.h"
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
      * ему выведется инструкция по использованию программы */
