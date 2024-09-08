@@ -25,8 +25,8 @@ struct Record {
     char *surname;//Фамилия студента
     char *name;//Имя студента
     char *patronim;//Отчество студента
-    char *id;//Номер студенческого билета
-    int mark[5];//Оценки студента
+    char id[8];//Номер студенческого билета
+    int marks[5];//Оценки студента
 };
 
 //Вывод сообщения об использовании программы
@@ -42,6 +42,10 @@ long FileLen(FILE *fptr);
  * При неудаче возвращается NULL
 *!ПАМЯТЬ ДОЛЖНА БЫТЬ ОСВОБОЖДЕНА!*/
 char *ReadUncommentedText(FILE *fptr);
+
+/*Функция чтения из строки text записей о студентах
+!ПАМЯТЬ ДОЛЖНА БЫТЬ ОСВОБОЖДЕНА! */
+struct Record* GetStudentList(const char* text);
 
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
@@ -72,6 +76,16 @@ int main (const int argc, const char** argv) {
     free(text);
     fclose(fptr);//Закрытие файла
     return EXIT_SUCCESS;
+}
+
+struct Record* GetStudentList(const char* text) {
+    char tmpSurname[100];   //Временное хранилище фамилий
+    char tmpName[100];      //Временное хранилище имени
+    char tmpPatronim[100];  //Временное хранилище отчества
+    char tmpId[8];          //Временное хранилище номера з/к
+    int tmpNum;             //Временное хранилище номера
+    int tmpMarks[5];        //Временное хранилище оценок
+
 }
 
 char *ReadUncommentedText(FILE *fptr) {
