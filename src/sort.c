@@ -1,15 +1,15 @@
 #include "sort.h"
 
 int SortA_L1 (const void *a, const void *b) {
-    int arg1 = ((struct Record *)a)->marks[0];
-    int arg2 = ((struct Record *)b)->marks[0];
+    int arg1 = ((struct Record *)b)->marks[0];
+    int arg2 = ((struct Record *)a)->marks[0];
     return (arg2 > arg1) - (arg2 < arg1);
 }
 
 int SortD_L1 (const void *a, const void *b) {
     int arg1 = ((struct Record *)a)->marks[0];
     int arg2 = ((struct Record *)b)->marks[0];
-    return (arg1 > arg2) - (arg1 < arg2);
+    return (arg2 > arg1) - (arg2 < arg1);
 }
 
 int SortA_L2 (const void *a, const void *b) {
@@ -19,56 +19,56 @@ int SortA_L2 (const void *a, const void *b) {
 }
 
 int SortD_L2 (const void *a, const void *b) {
-    int arg1 = ((struct Record *)a)->marks[1];
-    int arg2 = ((struct Record *)b)->marks[1];
-    return (arg1 > arg2) - (arg1 < arg2);
+    int arg1 = ((struct Record *)b)->marks[1];
+    int arg2 = ((struct Record *)a)->marks[1];
+    return (arg2 > arg1) - (arg2 < arg1);
 }
 
 int SortA_L3 (const void *a, const void *b) {
     int arg1 = ((struct Record *)a)->marks[2];
     int arg2 = ((struct Record *)b)->marks[2];
-    return (arg2 > arg1) - (arg2 < arg1);
+    return (arg1 > arg2) - (arg1 < arg2);
 }
 
 int SortD_L3 (const void *a, const void *b) {
     int arg1 = ((struct Record *)a)->marks[2];
     int arg2 = ((struct Record *)b)->marks[2];
-    return (arg1 > arg2) - (arg1 < arg2);
+    return (arg2 > arg1) - (arg2 < arg1);
 }
 
 int SortA_L4 (const void *a, const void *b) {
     int arg1 = ((struct Record *)a)->marks[3];
     int arg2 = ((struct Record *)b)->marks[3];
-    return (arg2 > arg1) - (arg2 < arg1);
+    return (arg1 > arg2) - (arg1 < arg2);
 }
 
 int SortD_L4 (const void *a, const void *b) {
     int arg1 = ((struct Record *)a)->marks[3];
     int arg2 = ((struct Record *)b)->marks[3];
-    return (arg1 > arg2) - (arg1 < arg2);
+    return (arg2 > arg1) - (arg2 < arg1);
 }
 
 int SortA_L5 (const void *a, const void *b) {
     int arg1 = ((struct Record *)a)->marks[4];
     int arg2 = ((struct Record *)b)->marks[4];
-    return (arg2 > arg1) - (arg2 < arg1);
+    return (arg1 > arg2) - (arg1 < arg2);
 }
 
 int SortD_L5 (const void *a, const void *b) {
     int arg1 = ((struct Record *)a)->marks[4];
     int arg2 = ((struct Record *)b)->marks[4];
-    return (arg1 > arg2) - (arg1 < arg2);
+    return (arg2 > arg1) - (arg2 < arg1);
 }
 
 int SortA_Num (const void *a, const void *b) {
-    int arg1 = ((struct Record *)a)->number;
-    int arg2 = ((struct Record *)b)->number;
+    int arg1 = ((struct Record *)b)->number;
+    int arg2 = ((struct Record *)a)->number;
     return (arg2 > arg1) - (arg2 < arg1);
 }
 
 int SortD_Num (const void *a, const void *b) {
-    int arg1 = ((struct Record *)a)->number;
-    int arg2 = ((struct Record *)b)->number;
+    int arg1 = ((struct Record *)b)->number;
+    int arg2 = ((struct Record *)a)->number;
     return (arg1 > arg2) - (arg1 < arg2);
 }
 

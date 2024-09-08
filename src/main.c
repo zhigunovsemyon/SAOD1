@@ -137,34 +137,34 @@ int SortA_List (struct Record *List, int count, const char *sortkey) {
 
 int SortD_List (struct Record *List, int count, const char *sortkey) {
     if(!strcmp(sortkey, SURNAMEKEY)) { //Если ключ сортировки соответсвует пофамильному
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_Surname);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_Surname);
         return 0;
     } else if (!strcmp(sortkey, NAMEKEY)) { //Если ключ сортировки соответсвует поименному
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_Name);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_Name);
         return 0;
     } else if (!strcmp(sortkey, PATRONIMKEY)) { //Если ключ сортировки по отчествам
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_Patronim);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_Patronim);
         return 0;
     } else if (!strcmp(sortkey, NUMKEY)) { //Если ключ сортировки по номерам
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_Num);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_Num);
         return 0;
     } else if (!strcmp(sortkey, IDKEY)) { //Если ключ сортировки по номерам з/к
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_ID);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_ID);
         return 0;
     } else if (!strcmp(sortkey, L1KEY)) { //Если ключ сортировки по первому предмету
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_L1);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L1);
         return 0;
     } else if (!strcmp(sortkey, L2KEY)) { //Если ключ сортировки по второму предмету
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_L2);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L2);
         return 0;
     } else if (!strcmp(sortkey, L3KEY)) { //Если ключ сортировки по третьему предмету
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_L3);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L3);
         return 0;
     } else if (!strcmp(sortkey, L4KEY)) { //Если ключ сортировки по четвёртому предмету
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_L4);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L4);
         return 0;
     } else if (!strcmp(sortkey, L5KEY)) { //Если ключ сортировки по пятому предмету
-        qsort(List, (size_t)count, sizeof(struct Record), SortA_L5);
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_L5);
         return 0;
     } else { //Если ключ некорректный -- возвращается соответствующий флаг
         return 1;
