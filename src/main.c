@@ -74,6 +74,11 @@ int main (const int argc, const char** argv) {
     printf("Размер файла: %ld\n", FileLen(fptr));
     char *text = ReadUncommentedText(fptr);
     printf("%s\n", text);
+
+    int StudentCount;
+    struct Record* StudentList = GetStudentList(text, &StudentCount);
+
+    free(StudentList);
     free(text);
     fclose(fptr);//Закрытие файла
     return EXIT_SUCCESS;
@@ -81,11 +86,11 @@ int main (const int argc, const char** argv) {
 
 struct Record* GetStudentList(char* text, int *count) {
     int tmpNum;                     //Временное хранилище номера
-    char tmpSurname[100];       //Временное хранилище фамилий
-    char tmpName[100];         //Временное хранилище имени
-    char tmpPatronim[100];         //Временное хранилище отчества
-    char tmpId[8];         //Временное хранилище номера з/к
-    int tmpMarks[5];         //Временное хранилище оценок
+    char tmpSurname[100] = { 0 };   //Временное хранилище фамилий
+    char tmpName[100] = { 0 };      //Временное хранилище имени
+    char tmpPatronim[100] = { 0 };  //Временное хранилище отчества
+    char tmpId[8] = { 0 };          //Временное хранилище номера з/к
+    int tmpMarks[5] = { 0 };        //Временное хранилище оценок
     struct Record* Students = NULL; //Указатель на область памяти со студентами
 
     /*Цикл чтения строки*/
@@ -166,7 +171,9 @@ char *ReadUncommentedText(FILE *fptr) {
     for(i = 0; (buf = fgetc(fptr)) != EOF; i++){
         //Если при чтении файла встречается #, начинается внутренний цикл, идущий до переноса
         while (buf == '#'){
-            while ((buf = fgetc(fptr)) != '\n') {};
+            do {
+                buf = fgetc(fptr);
+            } while (!(buf == '\n' || buf == EOF));
             /*После цикла пропуска строки записывается новый символ следующей строки, 
             если это снова #, следующая строка также пропускается*/
             buf = fgetc(fptr);
