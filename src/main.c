@@ -85,6 +85,21 @@ int main (const int argc, const char** argv) {
     free(text);     //Очистка буфера текста
     fclose(fptr);   //Закрытие файла
 
+    if (StudentCount < 1) {
+        printf("Список пуст!\n");
+    }
+
+    int parameterIndex;
+    if ((parameterIndex = FindTheWord(argv, argc, SORTAKEY)) != -1) {
+        printf("Сортировка по возрастанию по: %s \n", argv[parameterIndex + 1]);
+    } else if ((parameterIndex = FindTheWord(argv, argc, SORTDKEY)) != -1) {
+        printf("Сортировка по убыванию по: %s \n", argv[parameterIndex + 1]);
+    } else if ((parameterIndex = FindTheWord(argv, argc, SEARCHKEY)) != -1) {
+        printf("Поиск по запросу: %s \n", argv[parameterIndex + 1]);
+    } else {
+        printf("Вывод списка без изменений целиком\n");
+    }
+
     PrintStudentList(stdout, StudentList, StudentCount);
 
     free(StudentList);
