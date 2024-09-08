@@ -68,24 +68,26 @@ int main (const int argc, const char** argv) {
     const char* filename = argv[argc - 1];
     printf("Открываемый файл: %s\n", filename);
 
+    FILE *fptr; //Текстовый файл с записями
     //Попытка открыть файл, вывод сообщения об ошибке в случае неудачи
-    FILE *fptr = fopen(filename, "rt");
-    if(fptr == NULL) {
+    if((fptr = fopen(filename, "rt")) == NULL) {
         perror(filename);
         return ERR_FILENOTFOUND;
     }
-    printf("Размер файла: %ld\n", FileLen(fptr));
+    printf("Размер файла: %ld\n\n", FileLen(fptr));
+    //Текст из файла без комментариев
     char *text = ReadUncommentedText(fptr);
-    printf("%s\n", text);
 
-    int StudentCount;
+    int StudentCount; //Счётчик числа записей
+    //Список записей
     struct Record* StudentList = GetStudentList(text, &StudentCount);
+
+    free(text);     //Очистка буфера текста
+    fclose(fptr);   //Закрытие файла
 
     PrintStudentList(stdout, StudentList, StudentCount);
 
     free(StudentList);
-    free(text);
-    fclose(fptr);//Закрытие файла
     return EXIT_SUCCESS;
 }
 
