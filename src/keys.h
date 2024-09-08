@@ -1,5 +1,5 @@
-#ifndef MAIN_H 
-#define MAIN_H 
+#ifndef KEYS_H 
+#define KEYS_H 
 
 
 //Ключи работы с программой

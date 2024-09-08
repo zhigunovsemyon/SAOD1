@@ -6,6 +6,7 @@
  * */
 
 #include "main.h"
+
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
      * ему выведется инструкция по использованию программы */
@@ -40,26 +41,57 @@ int main (const int argc, const char** argv) {
     free(text);     //Очистка буфера текста
     fclose(fptr);   //Закрытие файла
 
-    if (StudentCount < 1) {
-        printf("Список пуст!\n");
-    }
-
     int parameterIndex;
     if ((parameterIndex = FindTheWord(argv, argc, SORTAKEY)) != -1) {
-        printf("Сортировка по возрастанию по: %s \n", argv[parameterIndex + 1]);
+        SortA_List(StudentList, StudentCount, argv[parameterIndex + 1]);
     } else if ((parameterIndex = FindTheWord(argv, argc, SORTDKEY)) != -1) {
-        printf("Сортировка по убыванию по: %s \n", argv[parameterIndex + 1]);
+        SortD_List(StudentList, StudentCount, argv[parameterIndex + 1]);
     } else if ((parameterIndex = FindTheWord(argv, argc, SEARCHKEY)) != -1) {
-        printf("Поиск по запросу: %s \n", argv[parameterIndex + 1]);
     } else {
         printf("Вывод списка без изменений целиком\n");
     }
 
-    PrintStudentList(stdout, StudentList, StudentCount);
+    if (StudentList != NULL && StudentCount > 0){
+        PrintStudentList(stdout, StudentList, StudentCount);
+        free(StudentList);
+    }
+    else {
+        printf("Список пуст!");
+    }
 
-    free(StudentList);
     return EXIT_SUCCESS;
 }
+
+int SortA_List (struct Record *List, int count, const char *sortkey) {
+    if (List == NULL && count < 1){
+        return 0;
+    }
+
+    if(!strcmp(sortkey, SURNAMEKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortA_Surname);
+        return 0;
+    } else {
+        return 1;
+    }
+
+}
+
+int SortD_List (struct Record *List, int count, const char *sortkey) {
+    if (List == NULL && count < 1){
+        return 0;
+    }
+
+    if(!strcmp(sortkey, SURNAMEKEY)) {
+        qsort(List, (size_t)count, sizeof(struct Record), SortD_Surname);
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+// struct Record *SearchInList (struct Record *oldList, int *count, const char *sortkey) {
+//     return 0;
+// }
 
 void PrintStudentList(FILE* dest, struct Record* List, const int count) {
     puts("Список:");

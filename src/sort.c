@@ -1,6 +1,10 @@
 #include "sort.h"
 
-static int invert_strcmp(const char *str1, const char *str2) {
-    return (-1) * strcmp(str1, str2);
+int SortA_Surname (const void *a, const void *b) {
+    return strcmp(((struct Record *) a)->surname,((struct Record *) b)->surname);
+}
+
+int SortD_Surname (const void *a, const void *b) {
+    return strcmp(((struct Record *) b)->surname,((struct Record *) a)->surname);
 }
 
