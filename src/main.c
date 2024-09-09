@@ -199,11 +199,12 @@ int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count,
         //Если цикл дошёл до сюда, при этом флаг ещё поднят, значит это первое совпадение
         if (EmptyFlag == 1 ) {
             //Вывод шапки таблицы
-            printf("№ фамилия Имя Отчество № з/к %s %s %s %s %s\n", L1KEY, L2KEY, L3KEY, L4KEY, L5KEY);
+            printf("№  фамилия\tИмя\tОтчество\t№ з/к    %s %s %s %s %s\n", 
+                L1KEY, L2KEY, L3KEY, L4KEY, L5KEY);
             EmptyFlag = 0;//Осуществляется сброс флага несоответствия
         }
         //Осуществляется вывод записи
-        fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
+        fprintf(dest, "%-2d %s\t%s\t%s\t%s %d %d %d %d %d\n",
             cur->number, cur->surname, cur->name, cur->patronim, cur->id,
             cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
     }
@@ -213,13 +214,14 @@ int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count,
 
 void PrintWholeStudentList(FILE* dest, struct Record* List, const int count) {
     //Вывод шапки таблицы
-    printf("№ фамилия Имя Отчество № з/к %s %s %s %s %s\n", L1KEY, L2KEY, L3KEY, L4KEY, L5KEY);
+    printf("№  фамилия\tИмя\tОтчество\t№ з/к    %s %s %s %s %s\n", 
+           L1KEY, L2KEY, L3KEY, L4KEY, L5KEY);
     //Цикл, перебирающий каждую запись
     for (int i = 0; i < count; ++i) {
         struct Record* cur = List + i;//Текущая запись
 
         //Вывод записи
-        fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
+        fprintf(dest, "%-2d %s\t%s\t%s\t%s %d %d %d %d %d\n",
             cur->number, cur->surname, cur->name, cur->patronim, cur->id,
             cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
     }
