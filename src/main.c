@@ -6,6 +6,7 @@
  * */
 
 #include "main.h"
+#include "keys.h"
 #include <complex.h>
 
 int main (const int argc, const char** argv) {
@@ -195,7 +196,12 @@ int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count,
                 continue;
             }
         }
-        EmptyFlag = 0;//Осуществляется сброс флага несоответствия
+        //Если цикл дошёл до сюда, при этом флаг ещё поднят, значит это первое совпадение
+        if (EmptyFlag == 1 ) {
+            //Вывод шапки таблицы
+            printf("№ фамилия Имя Отчество № з/к %s %s %s %s %s\n", L1KEY, L2KEY, L3KEY, L4KEY, L5KEY);
+            EmptyFlag = 0;//Осуществляется сброс флага несоответствия
+        }
         //Осуществляется вывод записи
         fprintf(dest, "%d %s\t%s\t%s\t%s %d %d %d %d %d\n",
             cur->number, cur->surname, cur->name, cur->patronim, cur->id,
@@ -206,6 +212,8 @@ int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count,
 }
 
 void PrintWholeStudentList(FILE* dest, struct Record* List, const int count) {
+    //Вывод шапки таблицы
+    printf("№ фамилия Имя Отчество № з/к %s %s %s %s %s\n", L1KEY, L2KEY, L3KEY, L4KEY, L5KEY);
     //Цикл, перебирающий каждую запись
     for (int i = 0; i < count; ++i) {
         struct Record* cur = List + i;//Текущая запись
