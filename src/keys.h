@@ -17,5 +17,6 @@
 #define L3KEY "cs" //Сортировка по третьему предмету
 #define L4KEY "physics" //Сортировка по четвёртому предмету
 #define L5KEY "philosophy" //Сортировка по пятому предмету
+#define AVGRANGE "--avgrange" //Вывод студентов с данным диапазоном средних оценок
 
 #endif

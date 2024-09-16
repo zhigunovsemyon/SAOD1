@@ -6,6 +6,7 @@
  * */
 
 #include "main.h"
+#include "keys.h"
 
 int main (const int argc, const char** argv) {
     /*Если пользователь не указал аргументы функции, 
@@ -378,5 +379,6 @@ void usage(const char* exename) {
     printf("\t\t%s\t%s\n\n", L5KEY, "Сортировка по пятому предмету");
 
     printf("\t%s ЗАПРОС\t\t%s\n", SEARCHKEY ,"Поиск среди полей");
+    printf("\t%s ОЦ1 ОЦ2\t%s\n", AVGRANGE ,"Вывод студентов с данным диапазоном средних оценок");
     printf("\t%s\tВывод этой справки\n", HELPKEY);
 }
