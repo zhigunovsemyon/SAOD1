@@ -15,6 +15,9 @@ struct Record {
     int marks[5];//Оценки студента
 };
 
+//Расчёт среднего балла студента
+float AvgMark(struct Record *ptr);
+
 //Очистка из памяти динамического списка записей List размера count
 void FreeStudentList(struct Record *List, int count);
 

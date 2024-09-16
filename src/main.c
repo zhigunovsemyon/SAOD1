@@ -88,6 +88,15 @@ int main (const int argc, const char** argv) {
     return EXIT_SUCCESS;
 }
 
+float AvgMark(struct Record *ptr) {
+	int sum = 0;
+	for(int i = 0; i < 5; i++){
+		sum += ptr->marks[i];
+	}
+
+	return (float)sum / 5.0f;
+}
+
 void FreeStudentList(struct Record *List, int count) {
     while (count--) {
         free(List[count].name);
@@ -197,14 +206,14 @@ int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count,
         //Если цикл дошёл до сюда, при этом флаг ещё поднят, значит это первое совпадение
         if (EmptyFlag == 1 ) {
             //Вывод шапки таблицы
-            printf("№  фамилия\tИмя\tОтчество\t№ з/к    %s %s %s %s %s\n", 
+            printf("№  фамилия\tИмя\tОтчество\t№ з/к    %s %s %s %s %s AVG\n", 
                 L1KEY, L2KEY, L3KEY, L4KEY, L5KEY);
             EmptyFlag = 0;//Осуществляется сброс флага несоответствия
         }
         //Осуществляется вывод записи
-        fprintf(dest, "%-2d %s\t%s\t%s\t%s %d %d %d %d %d\n",
+        fprintf(dest, "%-2d %s\t%s\t%s\t%s %d    %d       %d       %d      %d      %2.1f\n",
             cur->number, cur->surname, cur->name, cur->patronim, cur->id,
-            cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
+            cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4], AvgMark(cur));
     }
     //Флаг возвращается из функции
     return EmptyFlag;
@@ -218,10 +227,10 @@ void PrintWholeStudentList(FILE* dest, struct Record* List, const int count) {
     for (int i = 0; i < count; ++i) {
         struct Record* cur = List + i;//Текущая запись
 
-        //Вывод записи
-        fprintf(dest, "%-2d %s\t%s\t%s\t%s %d %d %d %d %d\n",
+        //Осуществляется вывод записи
+        fprintf(dest, "%-2d %s\t%s\t%s\t%s %d %d %d %d %d %2.1f\n",
             cur->number, cur->surname, cur->name, cur->patronim, cur->id,
-            cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4]);
+            cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4], AvgMark(cur));
     }
 }
 
