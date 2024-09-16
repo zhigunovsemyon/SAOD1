@@ -74,8 +74,23 @@ int main (const int argc, const char** argv) {
         if (0 != PrintStudentsMatchingQuery(stdout, StudentList, StudentCount, argv[parameterIndex + 1])) {
             printf("Не найдено записей по запросу: \"%s\"!\n", argv[parameterIndex + 1]);
         } 
+    /* Если пользователь захотел осуществить поиск студентов со средней оценкой из некоторого диапазона,
+	 * то осуществляется вызов функции, выводящей только записи, соответствующие данному запросу. 
+     * Если таких записей нет -- выводится сообщение.*/
+    } else if ((parameterIndex = FindTheWord(argv, argc, AVGRANGE)) != -1) {
+		float lRange, hRange;
+		if(0 != GetMarkRange(argv[parameterIndex + 1], &lRange, &hRange)){
+			puts("Неправильно задан диапазон оценок!");
+			usage(argv[0]);
+			//Очистка динамически выделенной памяти, завершение работы
+   			FreeStudentList(StudentList, StudentCount);
+   			return EXIT_SUCCESS;
+		}
+        if (0 != PrintStudentsMatchingMarks(stdout, StudentList, StudentCount, lRange, hRange)) {
+            printf("Не найдено записей по запросу: \"%s\"!\n", argv[parameterIndex + 1]);
+        } 
     /* В ином случае осуществляется вывод всей базы данных */
-    } else {
+	} else {
         if (StudentList != NULL && StudentCount > 0){
             PrintWholeStudentList(stdout, StudentList, StudentCount);
         }
@@ -88,6 +103,24 @@ int main (const int argc, const char** argv) {
     FreeStudentList(StudentList, StudentCount);
     return EXIT_SUCCESS;
 }
+
+int GetMarkRange(const char *text, float *markA, float *markB){
+	//Чтение строки, идущей за ключом
+	int result = sscanf(text, "%f,%f", markA, markB);
+	//Если строка не содержит информации, возвращается код ошибки
+	if (result != 2){
+		return EXIT_FAILURE;
+	}
+	//Если вторая оценка меньше первой, они меняются местами
+	if (*markB < *markA){
+		float tmp = *markA;
+		*markA = *markB;
+		*markB = tmp;
+	}
+	//Возврат успешного завершения работы функции
+	return EXIT_SUCCESS;
+}
+
 
 float AvgMark(struct Record *ptr) {
 	int sum = 0;
@@ -215,6 +248,31 @@ int PrintStudentsMatchingQuery(FILE* dest, struct Record* List, const int count,
         fprintf(dest, "%-2d %s\t%s\t%s\t%s %d    %d       %d       %d      %d      %2.1f\n",
             cur->number, cur->surname, cur->name, cur->patronim, cur->id,
             cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4], AvgMark(cur));
+    }
+    //Флаг возвращается из функции
+    return EmptyFlag;
+}
+
+int PrintStudentsMatchingMarks(FILE* dest, struct Record* List, const int count, float const lowMark, float const highMark) {
+    int EmptyFlag = 1; //Флаг несоответствия запроса записям
+    //Вывод шапки таблицы
+    printf("№  фамилия\tИмя\tОтчество\t№ з/к    %s %s %s %s %s\n", 
+           L1KEY, L2KEY, L3KEY, L4KEY, L5KEY);
+    //Цикл, перебирающий каждую запись
+    for (int i = 0; i < count; ++i) {
+        struct Record* cur = List + i;//Текущая запись
+		float const avgMark =  AvgMark(cur);
+
+		//Если оценка не соответствует диапазону, то строка пропускается
+		if (avgMark > highMark || avgMark < lowMark){
+			continue;
+		}
+
+        EmptyFlag = 0;//Осуществляется сброс флага несоответствия
+        //Осуществляется вывод записи
+        fprintf(dest, "%-2d %s\t%s\t%s\t%s %d %d %d %d %d %2.1f\n",
+            cur->number, cur->surname, cur->name, cur->patronim, cur->id,
+            cur->marks[0], cur->marks[1], cur->marks[2], cur->marks[3], cur->marks[4], avgMark);
     }
     //Флаг возвращается из функции
     return EmptyFlag;
@@ -379,6 +437,6 @@ void usage(const char* exename) {
     printf("\t\t%s\t%s\n\n", L5KEY, "Сортировка по пятому предмету");
 
     printf("\t%s ЗАПРОС\t\t%s\n", SEARCHKEY ,"Поиск среди полей");
-    printf("\t%s ОЦ1 ОЦ2\t%s\n", AVGRANGE ,"Вывод студентов с данным диапазоном средних оценок");
+    printf("\t%s ОЦ1,ОЦ2\t%s\n", AVGRANGE ,"Вывод студентов с данным диапазоном средних оценок");
     printf("\t%s\tВывод этой справки\n", HELPKEY);
 }
